@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import Board from "./components/Board";
+import Header from "./components/Header";
 
 function App() {
   const [level, setLevel] = useState(null);
@@ -9,7 +10,7 @@ function App() {
     intermediate: { rows: 16, columns: 16, mines: 40 },
     expert: { rows: 16, columns: 30, mines: 99 },
   };
-  
+
   return (
     <Box
       display="flex"
@@ -18,20 +19,13 @@ function App() {
       flexDirection="column"
       sx={{ width: "100vw", height: "100vh", bgcolor: "#f2f2f2" }}
     >
-      <Typography
-        variant="h2"
-        color="primary"
-        sx={{ alignSelf: "flex-start", marginLeft: "3rem", marginTop: "1rem" }}
-      >
-        Minesweeper
-      </Typography>
+      <Header setLevel={setLevel} />
       <div
         style={{
           flexGrow: 1,
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
-          paddingTop: level === null ? "10rem" : "0rem",
           gap: "3rem",
         }}
       >
@@ -64,7 +58,9 @@ function App() {
           </>
         )}
         {level === "beginner" && <Board config={levelConfig["beginner"]} />}
-        {level === "intermediate" && <Board config={levelConfig["intermediate"]} />}
+        {level === "intermediate" && (
+          <Board config={levelConfig["intermediate"]} />
+        )}
         {level === "expert" && <Board config={levelConfig["expert"]} />}
       </div>
     </Box>
