@@ -1,19 +1,14 @@
 import React, { Fragment, useState } from "react";
 
 import Box from "@mui/material/Box";
-import sizes from "../utils/sizes";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import BoardControls from "./BoardControls";
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 
-const initBoard = () => {
-  // returns the internal representation of the board.
-
-  return new Array(sizes.num_rows).fill(
-    new Array(sizes.num_columns).fill({
-      backgroundColor: "white",
-    })
-  );
-};
+// Constants for cell size and gaps
+const cellWidth = 25;
+const cellHeight = 25;
 
 const Cell = (props) => {
   const { cellContent, onClickCallback } = props;
@@ -22,25 +17,33 @@ const Cell = (props) => {
     <Box
       onClick={() => onClickCallback()}
       sx={{
-        width: sizes.cell_width,
-        height: sizes.cell_height,
+        width: cellWidth,
+        height: cellHeight,
         border: 1,
+        borderColor: "#f9f9f9",
         backgroundColor: cellContent.backgroundColor,
-        borderRadius: "50%",
       }}
     ></Box>
   );
 };
 
 const Row = (props) => {
-  const { row, onClickCallback } = props;
+  const { row, columns, onClickCallback } = props;
 
   return (
     <Fragment>
-      <Grid container columns={sizes.num_columns}>
+      <Grid
+        container
+        spacing={0}
+        sx={{ width: "100%", maxWidth: cellWidth * columns }}
+      >
         {row.map((cellContent, colIdx) => {
           return (
-            <Grid item xs={1} key={colIdx}>
+            <Grid
+              item
+              key={colIdx}
+              sx={{ width: `${100 / columns}%`, height: cellHeight }}
+            >
               <Cell
                 cellContent={cellContent}
                 onClickCallback={() => onClickCallback(colIdx)}
@@ -53,32 +56,33 @@ const Row = (props) => {
   );
 };
 
-const Board = (props) => {
+const Board = ({ config }) => {
+  const { rows, columns, mines } = config;
+  const initBoard = () => {
+    return new Array(rows).fill(
+      new Array(columns).fill({
+        backgroundColor: "lightgrey",
+        mines,
+      })
+    );
+  };
   const [board, setBoard] = useState(initBoard);
 
-  const width = () =>
-    sizes.num_columns * sizes.cell_width +
-    (sizes.num_columns - 1) * sizes.h_gap;
-  const height = () =>
-    sizes.num_rows * sizes.cell_height + (sizes.num_rows - 1) * sizes.v_gap;
-
   const onClickCallback = (rowIdx, colIdx) => {
-    console.log(`rowIdx = ${rowIdx}, colIdx = ${colIdx}`);
+    console.log(`Row: ${rowIdx}, Column: ${colIdx}`);
 
-    const newBoard = board.slice();
-    const affectedRow = board[rowIdx].slice();
-    // const content = affectedRow[colIdx];
-
-    // content['backgroundColor'] = 'blue';
-
-    affectedRow[colIdx] = {
-      ...affectedRow[colIdx],
+    const newBoard = [...board];
+    newBoard[rowIdx] = [...newBoard[rowIdx]];
+    newBoard[rowIdx][colIdx] = {
+      ...newBoard[rowIdx][colIdx],
       backgroundColor: "blue",
     };
-
-    newBoard[rowIdx] = affectedRow;
     setBoard(newBoard);
   };
+
+  // Dynamic width and height calculation
+  const dynamicWidth = columns * cellWidth;
+  const dynamicHeight = rows * cellHeight;
 
   return (
     <Box
@@ -91,25 +95,42 @@ const Board = (props) => {
     >
       <Box
         sx={{
-          width: width() + 100,
-          height: height() + 100,
+          border: 5,
+          borderColor: "#f9f9f9",
+          width: dynamicWidth,
+          height: 50,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
+        <Typography variant="h5" color="darkgreen">
+          {mines}
+        </Typography>
+        <SentimentSatisfiedAltIcon color="warning" />
+        <Typography variant="h5" color="crimson">
+          000
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          width: dynamicWidth,
+          height: dynamicHeight,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "hidden",
+          border: 5,
+          borderColor: "#f9f9f9",
+          borderRadius: 1,
         }}
       >
-        <Grid
-          container
-          columns={1}
-          sx={{
-            width: width(),
-            height: height(),
-          }}
-        >
+        <Grid container sx={{ width: "100%", height: "100%" }}>
           {board.map((row, rowIdx) => (
-            <Grid item key={rowIdx} xs={1}>
+            <Grid item key={rowIdx} xs={12}>
               <Row
                 row={row}
+                columns={columns}
                 onClickCallback={(colIdx) => onClickCallback(rowIdx, colIdx)}
               />
             </Grid>

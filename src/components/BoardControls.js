@@ -4,6 +4,8 @@ import FlagIcon from "@mui/icons-material/Flag";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
+const bomb = "\u{1F4A3}";
+
 function BoardControls({ onPlaceFlag, onShowMines, onRevealBoard }) {
   return (
     <Box
@@ -18,11 +20,11 @@ function BoardControls({ onPlaceFlag, onShowMines, onRevealBoard }) {
       <IconButton onClick={onPlaceFlag} color="primary">
         <FlagIcon />
       </IconButton>
-      <IconButton onClick={onShowMines} color="secondary">
+      <IconButton onClick={onShowMines} color="primary">
         <VisibilityIcon />
       </IconButton>
       <IconButton onClick={onRevealBoard} color="error">
-        <HighlightOffIcon />
+        {bomb}
       </IconButton>
     </Box>
   );
