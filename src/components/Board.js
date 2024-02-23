@@ -1,17 +1,37 @@
-import React, { Fragment, useState } from "react";
-
+import React, { Fragment, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { Grid, Typography } from "@mui/material";
 import BoardControls from "./BoardControls";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+import {  initBoard, placeMines } from "../utils/boardUtils";
 
 // Constants for cell size and gaps
 const cellWidth = 25;
 const cellHeight = 25;
+const bomb = "\u{1F4A3}";
 
 const Cell = (props) => {
   const { cellContent, onClickCallback } = props;
+
+  // Initially, copy cellContent to newCellContent to potentially modify it
+  let newCellContent = { ...cellContent };
+
+  // Adjust newCellContent based on conditions
+  if (cellContent.isRevealed && cellContent.isMine) {
+    // When the cell is revealed and it's a mine, modify newCellContent accordingly
+    newCellContent = {
+      ...newCellContent, // Make sure to spread newCellContent, not cellContent
+      backgroundColor: "white", // Setting a specific background color for revealed mines
+      content: bomb, // Adding specific content (e.g., a bomb icon) for mines
+    };
+  } else {
+    // For other conditions, you can add more else/if blocks to modify newCellContent as needed
+    // Example:
+    // if (cellContent.isRevealed && !cellContent.isMine) {
+    //   newCellContent.content = cellContent.minesAround > 0 ? cellContent.minesAround : '';
+    // }
+  }
 
   return (
     <Box
@@ -21,11 +41,19 @@ const Cell = (props) => {
         height: cellHeight,
         border: 1,
         borderColor: "#f9f9f9",
-        backgroundColor: cellContent.backgroundColor,
+        backgroundColor: newCellContent.backgroundColor, // Use backgroundColor from newCellContent
+        cursor: "pointer",
+        boxSizing: "border-box",
+        display: "flex", // Ensure content is centered
+        alignItems: "center", // Center content vertically
+        justifyContent: "center", // Center content horizontally
       }}
-    ></Box>
+    >
+      {newCellContent.content} {/* Display content from newCellContent */}
+    </Box>
   );
 };
+
 
 const Row = (props) => {
   const { row, columns, onClickCallback } = props;
@@ -56,29 +84,28 @@ const Row = (props) => {
   );
 };
 
-const Board = ({ config }) => {
+const Board = ({ config, dispatch, board }) => {
   const { rows, columns, mines } = config;
-  const initBoard = () => {
-    return new Array(rows).fill(
-      new Array(columns).fill({
-        backgroundColor: "lightgrey",
-        mines,
-      })
-    );
-  };
-  const [board, setBoard] = useState(initBoard);
 
-  const onClickCallback = (rowIdx, colIdx) => {
-    console.log(`Row: ${rowIdx}, Column: ${colIdx}`);
+  // Initialize the board state when component mounts
+  useEffect(() => {
+    dispatch({
+      type: "UPDATE_BOARD",
+      payload: initBoard(rows, columns, mines),
+    });
+  }, [dispatch, rows, columns, mines]);
+    
+console.log(`board: ${board}`);
 
-    const newBoard = [...board];
-    newBoard[rowIdx] = [...newBoard[rowIdx]];
-    newBoard[rowIdx][colIdx] = {
-      ...newBoard[rowIdx][colIdx],
-      backgroundColor: "blue",
-    };
-    setBoard(newBoard);
-  };
+const onClickCallback = (rowIdx, colIdx) => {
+  console.log(`Row: ${rowIdx}, Column: ${colIdx}`);
+
+  // Dispatch an action to update the board state
+  dispatch({
+    type: "UPDATE_BOARD",
+    payload: { rowIdx, colIdx, backgroundColor: "blue" },
+  });
+};
 
   // Dynamic width and height calculation
   const dynamicWidth = columns * cellWidth;
@@ -140,7 +167,7 @@ const Board = ({ config }) => {
           ))}
         </Grid>
       </Box>
-      <BoardControls />
+      <BoardControls dispatch={dispatch} />
     </Box>
   );
 };

@@ -57,11 +57,11 @@ const [state, dispatch] = useReducer(gameReducer, initialState);
             </Button>
           </>
         )}
-        {state.level === "beginner" && <Board config={levelConfig["beginner"]} />}
+        {state.level === "beginner" && <Board config={levelConfig["beginner"]} dispatch={dispatch} board={state.board} />}
         {state.level === "intermediate" && (
-          <Board config={levelConfig["intermediate"]} />
+         <Board config={levelConfig["intermediate"]} dispatch={dispatch} board={state.board } />
         )}
-        {state.level === "expert" && <Board config={levelConfig["expert"]} />}
+        {state.level === "expert" && <Board config={levelConfig["expert"]} dispatch={dispatch} board={state.board} />}
       </div>
     </Box>
   );

@@ -12,6 +12,24 @@ const gameReducer = (state, action) => {
                 ...state,
                 showHistory: action.payload, // true or false
             };
+        case 'UPDATE_BOARD':
+            return {
+                ...state,
+                board: action.payload,
+            };
+        case 'SHOW_MINES':
+            return {
+              ...state,
+              board: state.board.map((row) =>
+                row.map((cell) => {
+                  // If you want to toggle visibility back and forth
+                  if (cell.isMine) {
+                    return { ...cell, isRevealed: !cell.isRevealed };
+                  }
+                  return cell;
+                })
+              ),
+            };
         default:
             return state;
     };
