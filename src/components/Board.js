@@ -3,7 +3,6 @@ import React, { Fragment, useState } from "react";
 import Box from "@mui/material/Box";
 import { Grid, Typography } from "@mui/material";
 import BoardControls from "./BoardControls";
-import History from "./History";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 
@@ -97,22 +96,6 @@ const Board = ({ config }) => {
         width: "100%", // Take full width
       }}
     >
-      {/* History positioned in the upper right corner */}
-      <Box
-        sx={{
-          position: "absolute", // This takes it out of the normal document flow
-          top: 70, // Align to the top of the container
-          right: 20, // Align to the right of the container
-          margin: "10px", // Add some margin
-          // Example media query to reduce size on small screens
-          "@media (max-width:600px)": {
-            margin: "4px",
-            transform: "scale(0.6)", // Shrink the component
-          },
-        }}
-      >
-        <History />
-      </Box>
       <Box
         sx={{
           border: 5,

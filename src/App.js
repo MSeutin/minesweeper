@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
+import { useReducer } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import Board from "./components/Board";
 import Header from "./components/Header";
+import gameReducer from "./reducers/gameReducer";
+import initialState from "./reducers/initialState";
+import { levelConfig } from "./config/levelConfig";
 
 function App() {
-  const [level, setLevel] = useState(null);
-  const levelConfig = {
-    beginner: { rows: 9, columns: 9, mines: 10 },
-    intermediate: { rows: 16, columns: 16, mines: 40 },
-    expert: { rows: 16, columns: 30, mines: 99 },
-  };
 
-  return (
+// initiate useReducer
+const [state, dispatch] = useReducer(gameReducer, initialState);
+
+ return (
     <Box
       display="flex"
       alignItems="center"
@@ -19,7 +19,7 @@ function App() {
       flexDirection="column"
       sx={{ width: "100vw", height: "100vh", bgcolor: "#f2f2f2" }}
     >
-      <Header setLevel={setLevel} />
+      <Header setLevel={(level)=> dispatch({ type: "SET_LEVEL", payload: level})} level={state.level} dispatch={dispatch} showHistory={state.showHistory} />
       <div
         style={{
           flexGrow: 1,
@@ -29,21 +29,21 @@ function App() {
           gap: "3rem",
         }}
       >
-        {level === null && (
+        {state.level === null && (
           <>
             <Button
-              variant="outlined"
-              color="primary"
-              size="large"
-              onClick={() => setLevel("beginner")}
+             variant="outlined"
+             color="primary"
+             size="large"
+             onClick={() => dispatch({ type: "SET_LEVEL", payload: "beginner" })}
             >
               Beginner
             </Button>
             <Button
-              variant="outlined"
-              color="primary"
-              size="large"
-              onClick={() => setLevel("intermediate")}
+             variant="outlined"
+             color="primary"
+             size="large"
+             onClick={() => dispatch({ type: "SET_LEVEL", payload: "intermediate" })}
             >
               Intermediate
             </Button>
@@ -51,17 +51,17 @@ function App() {
               variant="outlined"
               color="primary"
               size="large"
-              onClick={() => setLevel("expert")}
+              onClick={() => dispatch({ type: "SET_LEVEL", payload: "expert" })}
             >
               Expert
             </Button>
           </>
         )}
-        {level === "beginner" && <Board config={levelConfig["beginner"]} />}
-        {level === "intermediate" && (
+        {state.level === "beginner" && <Board config={levelConfig["beginner"]} />}
+        {state.level === "intermediate" && (
           <Board config={levelConfig["intermediate"]} />
         )}
-        {level === "expert" && <Board config={levelConfig["expert"]} />}
+        {state.level === "expert" && <Board config={levelConfig["expert"]} />}
       </div>
     </Box>
   );
