@@ -15,16 +15,17 @@ const Cell = (props) => {
   const { cellContent, onClickCallback } = props;
 
   // Initially, copy cellContent to newCellContent to potentially modify it
-  let newCellContent = { ...cellContent };
+    let newCellContent = { ...cellContent };
+    console.log(`CellContent: ${JSON.stringify(cellContent)}`)
 
   // Adjust newCellContent based on conditions
-  if (cellContent.isRevealed && cellContent.isMine) {
-    // When the cell is revealed and it's a mine, modify newCellContent accordingly
-    newCellContent = {
-      ...newCellContent, // Make sure to spread newCellContent, not cellContent
-      backgroundColor: "white", // Setting a specific background color for revealed mines
-      content: bomb, // Adding specific content (e.g., a bomb icon) for mines
-    };
+  if (cellContent.isRevealed) {
+    if(cellContent.isMine) {
+        newCellContent.backgroundColor = newCellContent.isEndgame ? "red" : "white";
+        newCellContent.content = bomb;
+    } else if(cellContent.minesAround > 0) {
+        newCellContent.content = cellContent.minesAround;
+    }
   } else {
     // For other conditions, you can add more else/if blocks to modify newCellContent as needed
     // Example:
@@ -49,7 +50,9 @@ const Cell = (props) => {
         justifyContent: "center", // Center content horizontally
       }}
     >
-      {newCellContent.content} {/* Display content from newCellContent */}
+      <Typography variant="h5" sx={{ color: "pink" }}>
+        {newCellContent.content} {/* Display content from newCellContent */}
+      </Typography>
     </Box>
   );
 };
@@ -93,17 +96,16 @@ const Board = ({ config, dispatch, board }) => {
       type: "UPDATE_BOARD",
       payload: initBoard(rows, columns, mines),
     });
-  }, [dispatch, rows, columns, mines]);
+  }, []);
     
-console.log(`board: ${board}`);
 
 const onClickCallback = (rowIdx, colIdx) => {
   console.log(`Row: ${rowIdx}, Column: ${colIdx}`);
 
   // Dispatch an action to update the board state
   dispatch({
-    type: "UPDATE_BOARD",
-    payload: { rowIdx, colIdx, backgroundColor: "blue" },
+    type: "CELL_CLICKED",
+    payload: { rowIdx, colIdx },
   });
 };
 

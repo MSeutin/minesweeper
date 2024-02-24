@@ -9,11 +9,13 @@ export const initBoard = (rows, columns, mines) => {
       isMine: false,
       minesAround: 0,
       isFlagged: false,
+      isEndgame: false,
       content: "",
     }))
   );
 
-  board = placeMines(board, mines);
+    board = placeMines(board, mines);
+    board = calculateMinesAround(board);
   return board;
 };
 
