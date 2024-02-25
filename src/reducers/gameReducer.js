@@ -1,3 +1,9 @@
+import {
+  revealAllMines,
+  revealAllCells,
+  revealCell,
+} from "../utils/boardUtils";
+
 // gameReducer.js
 const bomb = "\u{1F4A3}";
 const gameReducer = (state, action) => {
@@ -13,39 +19,34 @@ const gameReducer = (state, action) => {
         showHistory: action.payload, // true or false
       };
     case "UPDATE_BOARD":
-        return {
-          ...state,
-          board: action.payload,
-        };
-    case "CELL_CLICKED":
-      const { rowIdx, colIdx } = action.payload;
-      let newBoard = state.board.map((row, rIdx) =>
-        row.map((cell, cIdx) => {
-          if (rIdx === rowIdx && cIdx === colIdx) {
-            // Additional logic to determine if the cell is a mine and update its state
-            const cellUpdate = cell.isMine
-              ? { isRevealed: true, backgroundColor: "red", content: bomb , isEndgame: true }
-              : { ...cell, backgroundColor: "white", isRevealed: true }; // Handle non-mine cells or additional game logic here
-            return { ...cell, ...cellUpdate };
-          }
-          return cell;
-        })
-      );
-      return { ...state, board: newBoard };
-
-    case "SHOW_MINES":
       return {
         ...state,
-        board: state.board.map((row) =>
-          row.map((cell) => {
-            // toggle visibility back and forth
-            if (cell.isMine) {
-              return { ...cell, isRevealed: !cell.isRevealed };
-            }
-            return cell;
-          })
-        ),
+        board: action.payload,
       };
+    case "REVEAL_CELL":
+      const { row, col } = action.payload;
+      // Use the revealCell function to update the board state
+      const updatedBoard = revealCell(state.board, row, col);
+
+      return {
+        ...state,
+        board: updatedBoard,
+      };
+
+    case "REVEAL_ALL_MINES":
+      return {
+        ...state,
+        board: revealAllMines(state.board, state.minesAreRevealed),
+        minesAreRevealed: !state.minesAreRevealed,
+      };
+
+    case "REVEAL_ALL_CELLS":
+      return {
+        ...state,
+        board: revealAllCells(state.board, state.allCellsAreRevealed),
+        allCellsAreRevealed: !state.allCellsAreRevealed,
+      };
+
     default:
       return state;
   }

@@ -9,30 +9,9 @@ import {  initBoard, placeMines } from "../utils/boardUtils";
 // Constants for cell size and gaps
 const cellWidth = 25;
 const cellHeight = 25;
-const bomb = "\u{1F4A3}";
 
 const Cell = (props) => {
   const { cellContent, onClickCallback } = props;
-
-  // Initially, copy cellContent to newCellContent to potentially modify it
-    let newCellContent = { ...cellContent };
-    console.log(`CellContent: ${JSON.stringify(cellContent)}`)
-
-  // Adjust newCellContent based on conditions
-  if (cellContent.isRevealed) {
-    if(cellContent.isMine) {
-        newCellContent.backgroundColor = newCellContent.isEndgame ? "red" : "white";
-        newCellContent.content = bomb;
-    } else if(cellContent.minesAround > 0) {
-        newCellContent.content = cellContent.minesAround;
-    }
-  } else {
-    // For other conditions, you can add more else/if blocks to modify newCellContent as needed
-    // Example:
-    // if (cellContent.isRevealed && !cellContent.isMine) {
-    //   newCellContent.content = cellContent.minesAround > 0 ? cellContent.minesAround : '';
-    // }
-  }
 
   return (
     <Box
@@ -42,7 +21,7 @@ const Cell = (props) => {
         height: cellHeight,
         border: 1,
         borderColor: "#f9f9f9",
-        backgroundColor: newCellContent.backgroundColor, // Use backgroundColor from newCellContent
+        backgroundColor: cellContent.isRevealed ? "white" : "lightgrey", 
         cursor: "pointer",
         boxSizing: "border-box",
         display: "flex", // Ensure content is centered
@@ -50,9 +29,11 @@ const Cell = (props) => {
         justifyContent: "center", // Center content horizontally
       }}
     >
-      <Typography variant="h5" sx={{ color: "pink" }}>
-        {newCellContent.content} {/* Display content from newCellContent */}
-      </Typography>
+      {cellContent.isRevealed && (
+        <Typography variant="h5" sx={{ color: "pink" }}>
+          {cellContent.content}
+        </Typography>
+      )}
     </Box>
   );
 };
@@ -100,12 +81,10 @@ const Board = ({ config, dispatch, board }) => {
     
 
 const onClickCallback = (rowIdx, colIdx) => {
-  console.log(`Row: ${rowIdx}, Column: ${colIdx}`);
-
   // Dispatch an action to update the board state
   dispatch({
-    type: "CELL_CLICKED",
-    payload: { rowIdx, colIdx },
+    type: "REVEAL_CELL",
+    payload: { row: rowIdx, col: colIdx },
   });
 };
 

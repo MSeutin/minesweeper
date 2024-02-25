@@ -1,5 +1,7 @@
 // boardUtils.js
 
+const bomb = "\u{1F4A3}";
+
 export const initBoard = (rows, columns, mines) => {
   // Create a new board with unique objects for each cell
   let board = new Array(rows).fill(null).map(() =>
@@ -39,7 +41,8 @@ export const placeMines = (board, mines) => {
 
       // If the flat index is in the set, mark this cell as containing a mine
       if (nums.has(flatIndex)) {
-        cellCopy.isMine = true;
+          cellCopy.isMine = true;
+          cellCopy.content = bomb;
       }
 
       return cellCopy;
@@ -70,8 +73,8 @@ export const calculateMinesAround = (board) => {
           }
         }
       }
-
-      return { ...cell, minesAround };
+      const content = minesAround === 0 ? "" : minesAround;
+      return { ...cell, minesAround, content };
     });
   });
 
@@ -105,10 +108,23 @@ export const revealCell = (board, row, col) => {
 };
 
 // reveal all cells
-export const revealAllCells = (board) => {
+export const revealAllCells = (board, allCellsAreRevealed) => {
   return board.map((row) => {
     return row.map((cell) => {
-      return { ...cell, isRevealed: true };
+      return { ...cell, isRevealed: !allCellsAreRevealed };
+    });
+  });
+};
+
+// reveal all mines
+export const revealAllMines = (board, minesAreRevealed) => {
+  return board.map((row) => {
+    return row.map((cell) => {
+      if (cell.isMine) {
+        return { ...cell, isRevealed: !minesAreRevealed };
+      }
+
+      return cell;
     });
   });
 };

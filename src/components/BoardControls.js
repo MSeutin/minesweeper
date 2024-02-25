@@ -7,9 +7,12 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 const bomb = "\u{1F4A3}";
 
 function BoardControls({ dispatch }) {
-  // Toggle function to show/hide mines
+    // Toggle functions
+    const toggleRevealAllCells = () => {
+        dispatch({ type: "REVEAL_ALL_CELLS" });
+    }
   const toggleMinesVisibility = () => {
-    dispatch({ type: "SHOW_MINES"}); 
+    dispatch({ type: "REVEAL_ALL_MINES" }); 
   };
   return (
     <Box
@@ -24,7 +27,7 @@ function BoardControls({ dispatch }) {
       <IconButton color="primary">
         <FlagIcon />
       </IconButton>
-      <IconButton color="primary">
+      <IconButton color="primary" onClick={toggleRevealAllCells}>
         <VisibilityIcon />
       </IconButton>
       <IconButton onClick={toggleMinesVisibility} color="error">
