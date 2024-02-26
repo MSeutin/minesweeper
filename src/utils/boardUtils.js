@@ -7,11 +7,11 @@ export const initBoard = (rows, columns, mines) => {
   let board = new Array(rows).fill(null).map(() =>
     new Array(columns).fill(null).map(() => ({
       backgroundColor: "lightgrey",
+      color: "black",
       isRevealed: false,
       isMine: false,
       minesAround: 0,
       isFlagged: false,
-      isEndgame: false,
       content: "",
     }))
   );

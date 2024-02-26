@@ -5,7 +5,7 @@ import FlagIcon from "@mui/icons-material/Flag";
 import BoardControls from "./BoardControls";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import { initBoard, placeMines } from "../utils/boardUtils";
+import { initBoard} from "../utils/boardUtils";
 
 // Constants for cell size and gaps
 const cellWidth = 25;
@@ -70,7 +70,7 @@ const Row = (props) => {
   );
 };
 
-const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer }) => {
+const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer, gameStarted, gameStatus }) => {
   const { rows, columns, mines } = config;
 
   // Initialize the board state when component mounts
@@ -83,31 +83,47 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer }) => {
     
     // set timer
     useEffect(() => {
-        const id = setInterval(() => {
-            dispatch({ type: "TICK" });
-        }, 1000);
-        
+          let id;
+          if (gameStarted) {
+            id = setInterval(() => {
+              dispatch({ type: "TICK" });
+            }, 1000);
+          }
+
         return () => clearInterval(id);
-    }, [timer])
+    }, [gameStarted])
 
     const onClickCallback = (rowIdx, colIdx) => {
+        if(gameStatus === "won" || gameStatus === "lost") return;
         const cell = board[rowIdx][colIdx];
+        if (!gameStarted) {
+            dispatch({ type: "START_GAME" });
+        }
         if (isFlagMode) {
           dispatch({
               type: "FLAG_CELL",
               payload: { row: rowIdx, col: colIdx },
           });
-        } else if (cell.isFlagged) {
+            return;
+        }
+        if (cell.isFlagged) {
           dispatch({
               type: "REMOVE_FLAG",
               payload: { row: rowIdx, col: colIdx },
           });
-        } else {
+            return;
+        } 
+
+        // if none of the above conditions are met, reveal the cell
       dispatch({
         type: "REVEAL_CELL",
         payload: { row: rowIdx, col: colIdx },
       });
-    }
+        
+        // if the cell is a mine, end the game
+        if (cell.isMine) {
+          dispatch({ type: "END_GAME", payload: "lost" });
+        }
   };
 
   // Dynamic width and height calculation
@@ -142,7 +158,7 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer }) => {
         </Typography>
         <SentimentSatisfiedAltIcon color="warning" />
         <Typography variant="h5" color="crimson">
-          {timer}
+          {timer.toString().padStart(3, "0")}
         </Typography>
       </Box>
       <Box

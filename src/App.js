@@ -77,6 +77,8 @@ function App() {
             isFlagMode={state.isFlagMode}
             isFlagged={state.isFlagged}
             timer={state.timer}
+            gameStarted={state.gameStarted}
+            gameStatus={state.gameStatus}
           />
         )}
         {state.level === "intermediate" && (
@@ -87,6 +89,8 @@ function App() {
             isFlagMode={state.isFlagMode}
             isFlagged={state.isFlagged}
             timer={state.timer}
+            gameStarted={state.gameStarted}
+            gameStatus={state.gameStatus}
           />
         )}
         {state.level === "expert" && (
@@ -97,6 +101,8 @@ function App() {
             isFlagMode={state.isFlagMode}
             isFlagged={state.isFlagged}
             timer={state.timer}
+            gameStarted={state.gameStarted}
+            gameStatus={state.gameStatus}
           />
         )}
       </div>

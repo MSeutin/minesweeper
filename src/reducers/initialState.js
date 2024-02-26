@@ -1,16 +1,17 @@
-// define the initial state
+// define the global state
 const initialState = {
   level: null,
+  gameHistory: [],
   showHistory: false,
   showMines: false,
   minesAreRevealed: false,
   allCellsAreRevealed: false,
-    isFlagMode: false,
-    isFlagged: false,
-    color: "",
-    backgroundColor: "",
-    timer: 0,
+  isFlagMode: false,
+  timer: 0,
   gameStatus: "", // can be "playing", "won", "lost"
+  gameStarted: false,
+  endGame: false,
+  timeOfGame: 0,
   board: [],
 };
 

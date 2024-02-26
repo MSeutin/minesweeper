@@ -1,15 +1,25 @@
+// gameReducer.js
 import {
   revealAllMines,
   revealAllCells,
   revealCell,
-    flagCell,
-    removeFlag,
+  flagCell,
+  removeFlag,
 } from "../utils/boardUtils";
 
-// gameReducer.js
-const bomb = "\u{1F4A3}";
 const gameReducer = (state, action) => {
   switch (action.type) {
+    case "START_GAME":
+      return {
+        ...state,
+        gameStarted: true,
+      };
+      case "END_GAME":
+        return {
+            ...state,
+            gameStarted: false, // stop the timer
+            gameStatus: action.payload,
+        };
     case "SET_LEVEL":
       return {
         ...state,
@@ -73,31 +83,31 @@ const gameReducer = (state, action) => {
         ...state,
         board: updatedBoard,
       };
-      }
-          
-      case "TICK":
-          return {
-              ...state,
-              timer: state.timer + 1,
-          }
-      
-      case "RESET_GAME":
-          return {
-              ...state,
-              level: null,
-              showHistory: false,
-              showMines: false,
-              minesAreRevealed: false,
-              allCellsAreRevealed: false,
-              isFlagMode: false,
-              isFlagged: false,
-              color: "",
-              backgroundColor: "",
-              timer: 0,
-              gameStatus: "",
-              board: [],
-                
-          }
+    }
+
+    case "TICK":
+      return {
+        ...state,
+        timer: state.timer + 1,
+      };
+
+    case "RESET_GAME":
+      return {
+        ...state,
+        level: null,
+        showHistory: false,
+        showMines: false,
+        minesAreRevealed: false,
+        allCellsAreRevealed: false,
+        isFlagMode: false,
+        isFlagged: false,
+        color: "",
+        backgroundColor: "",
+        timer: 0,
+        gameStatus: "",
+        gameStarted: false,
+        board: [],
+      };
 
     default:
       return state;
