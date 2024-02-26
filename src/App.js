@@ -7,11 +7,10 @@ import initialState from "./reducers/initialState";
 import { levelConfig } from "./config/levelConfig";
 
 function App() {
+  // initiate useReducer
+  const [state, dispatch] = useReducer(gameReducer, initialState);
 
-// initiate useReducer
-const [state, dispatch] = useReducer(gameReducer, initialState);
-
- return (
+  return (
     <Box
       display="flex"
       alignItems="center"
@@ -19,7 +18,12 @@ const [state, dispatch] = useReducer(gameReducer, initialState);
       flexDirection="column"
       sx={{ width: "100vw", height: "100vh", bgcolor: "#f2f2f2" }}
     >
-      <Header setLevel={(level)=> dispatch({ type: "SET_LEVEL", payload: level})} level={state.level} dispatch={dispatch} showHistory={state.showHistory} />
+      <Header
+        setLevel={(level) => dispatch({ type: "SET_LEVEL", payload: level })}
+        level={state.level}
+        dispatch={dispatch}
+        showHistory={state.showHistory}
+      />
       <div
         style={{
           flexGrow: 1,
@@ -32,18 +36,22 @@ const [state, dispatch] = useReducer(gameReducer, initialState);
         {state.level === null && (
           <>
             <Button
-             variant="outlined"
-             color="primary"
-             size="large"
-             onClick={() => dispatch({ type: "SET_LEVEL", payload: "beginner" })}
+              variant="outlined"
+              color="primary"
+              size="large"
+              onClick={() =>
+                dispatch({ type: "SET_LEVEL", payload: "beginner" })
+              }
             >
               Beginner
             </Button>
             <Button
-             variant="outlined"
-             color="primary"
-             size="large"
-             onClick={() => dispatch({ type: "SET_LEVEL", payload: "intermediate" })}
+              variant="outlined"
+              color="primary"
+              size="large"
+              onClick={() =>
+                dispatch({ type: "SET_LEVEL", payload: "intermediate" })
+              }
             >
               Intermediate
             </Button>
@@ -57,11 +65,33 @@ const [state, dispatch] = useReducer(gameReducer, initialState);
             </Button>
           </>
         )}
-        {state.level === "beginner" && <Board config={levelConfig["beginner"]} dispatch={dispatch} board={state.board} />}
-        {state.level === "intermediate" && (
-         <Board config={levelConfig["intermediate"]} dispatch={dispatch} board={state.board } />
+        {state.level === "beginner" && (
+          <Board
+            config={levelConfig["beginner"]}
+            dispatch={dispatch}
+            board={state.board}
+            isFlagMode={state.isFlagMode}
+            isFlagged={state.isFlagged}
+          />
         )}
-        {state.level === "expert" && <Board config={levelConfig["expert"]} dispatch={dispatch} board={state.board} />}
+        {state.level === "intermediate" && (
+          <Board
+            config={levelConfig["intermediate"]}
+            dispatch={dispatch}
+            board={state.board}
+            isFlagMode={state.isFlagMode}
+            isFlagged={state.isFlagged}
+          />
+        )}
+        {state.level === "expert" && (
+          <Board
+            config={levelConfig["expert"]}
+            dispatch={dispatch}
+            board={state.board}
+            isFlagMode={state.isFlagMode}
+            isFlagged={state.isFlagged}
+          />
+        )}
       </div>
     </Box>
   );

@@ -5,6 +5,10 @@ const initialState = {
   showMines: false,
   minesAreRevealed: false,
   allCellsAreRevealed: false,
+    isFlagMode: false,
+    isFlagged: false,
+    color: "",
+  backgroundColor: "",
   board: [],
 };
 

@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { Grid, Typography } from "@mui/material";
+import FlagIcon from "@mui/icons-material/Flag";
 import BoardControls from "./BoardControls";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import {  initBoard, placeMines } from "../utils/boardUtils";
+import { initBoard, placeMines } from "../utils/boardUtils";
 
 // Constants for cell size and gaps
 const cellWidth = 25;
@@ -21,7 +22,7 @@ const Cell = (props) => {
         height: cellHeight,
         border: 1,
         borderColor: "#f9f9f9",
-        backgroundColor: cellContent.isRevealed ? "white" : "lightgrey", 
+        backgroundColor: cellContent.backgroundColor,
         cursor: "pointer",
         boxSizing: "border-box",
         display: "flex", // Ensure content is centered
@@ -29,15 +30,16 @@ const Cell = (props) => {
         justifyContent: "center", // Center content horizontally
       }}
     >
-      {cellContent.isRevealed && (
-        <Typography variant="h5" sx={{ color: "pink" }}>
+      {cellContent.isRevealed ? (
+        <Typography variant="h6" sx={{ color: cellContent.color }}>
           {cellContent.content}
         </Typography>
-      )}
+      ) : cellContent.isFlagged ? (
+        <FlagIcon sx={{ color: cellContent.color }} />
+      ) : null}
     </Box>
   );
 };
-
 
 const Row = (props) => {
   const { row, columns, onClickCallback } = props;
@@ -68,7 +70,7 @@ const Row = (props) => {
   );
 };
 
-const Board = ({ config, dispatch, board }) => {
+const Board = ({ config, dispatch, board, isFlagMode, isFlagged }) => {
   const { rows, columns, mines } = config;
 
   // Initialize the board state when component mounts
@@ -78,15 +80,26 @@ const Board = ({ config, dispatch, board }) => {
       payload: initBoard(rows, columns, mines),
     });
   }, []);
-    
 
-const onClickCallback = (rowIdx, colIdx) => {
-  // Dispatch an action to update the board state
-  dispatch({
-    type: "REVEAL_CELL",
-    payload: { row: rowIdx, col: colIdx },
-  });
-};
+    const onClickCallback = (rowIdx, colIdx) => {
+        const cell = board[rowIdx][colIdx];
+        if (isFlagMode) {
+          dispatch({
+              type: "FLAG_CELL",
+              payload: { row: rowIdx, col: colIdx },
+          });
+        } else if (cell.isFlagged) {
+          dispatch({
+              type: "REMOVE_FLAG",
+              payload: { row: rowIdx, col: colIdx },
+          });
+        } else {
+      dispatch({
+        type: "REVEAL_CELL",
+        payload: { row: rowIdx, col: colIdx },
+      });
+    }
+  };
 
   // Dynamic width and height calculation
   const dynamicWidth = columns * cellWidth;
@@ -148,7 +161,7 @@ const onClickCallback = (rowIdx, colIdx) => {
           ))}
         </Grid>
       </Box>
-      <BoardControls dispatch={dispatch} />
+      <BoardControls dispatch={dispatch} isFlagMode={isFlagMode} />
     </Box>
   );
 };

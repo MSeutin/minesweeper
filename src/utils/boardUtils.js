@@ -1,5 +1,5 @@
 // boardUtils.js
-
+import FlagIcon from "@mui/icons-material/Flag";
 const bomb = "\u{1F4A3}";
 
 export const initBoard = (rows, columns, mines) => {
@@ -16,8 +16,8 @@ export const initBoard = (rows, columns, mines) => {
     }))
   );
 
-    board = placeMines(board, mines);
-    board = calculateMinesAround(board);
+  board = placeMines(board, mines);
+  board = calculateMinesAround(board);
   return board;
 };
 
@@ -41,8 +41,8 @@ export const placeMines = (board, mines) => {
 
       // If the flat index is in the set, mark this cell as containing a mine
       if (nums.has(flatIndex)) {
-          cellCopy.isMine = true;
-          cellCopy.content = bomb;
+        cellCopy.isMine = true;
+        cellCopy.content = bomb;
       }
 
       return cellCopy;
@@ -97,7 +97,12 @@ export const revealCell = (board, row, col) => {
   const newBoard = board.map((r, rowIndex) => {
     return r.map((cell, colIndex) => {
       if (rowIndex === row && colIndex === col) {
-        return { ...cell, isRevealed: true };
+        return {
+          ...cell,
+          isRevealed: true,
+          backgroundColor: "lightblue",
+          color: "darkgreen",
+        };
       }
 
       return cell;
@@ -151,8 +156,31 @@ export const isGameWon = (board) => {
 export const flagCell = (board, row, col) => {
   return board.map((r, rowIndex) => {
     return r.map((cell, colIndex) => {
+      if (rowIndex === row && colIndex === col && !cell.isRevealed) {
+        const isFlagged = !cell.isFlagged;
+        return {
+          ...cell,
+          isFlagged,
+          backgroundColor: isFlagged ? "lightgrey" : cell.backgroundColor,
+          color: isFlagged ? "crimson" : cell.color,
+        };
+      }
+
+      return cell;
+    });
+  });
+};
+
+// remove flag
+export const removeFlag = (board, row, col) => {
+  return board.map((r, rowIndex) => {
+    return r.map((cell, colIndex) => {
       if (rowIndex === row && colIndex === col) {
-        return { ...cell, isFlagged: !cell.isFlagged };
+        return {
+          ...cell,
+          isFlagged: false,
+          backgroundColor: "lightgrey",
+        };
       }
 
       return cell;

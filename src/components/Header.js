@@ -11,8 +11,6 @@ import History from "./History";
 
 export default function Header({ setLevel, level, dispatch, showHistory }) {
     const theme = useTheme();
-
-    console.log(showHistory);
     
     // use dispatch to toggle history
     const toggleShowHistory = (show) => {

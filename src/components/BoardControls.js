@@ -6,7 +6,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 const bomb = "\u{1F4A3}";
 
-function BoardControls({ dispatch }) {
+function BoardControls({ dispatch, isFlagMode }) {
     // Toggle functions
     const toggleRevealAllCells = () => {
         dispatch({ type: "REVEAL_ALL_CELLS" });
@@ -14,6 +14,13 @@ function BoardControls({ dispatch }) {
   const toggleMinesVisibility = () => {
     dispatch({ type: "REVEAL_ALL_MINES" }); 
   };
+    
+    const toggleFlagMode = () => {
+        dispatch({ type: "TOGGLE_FLAG_MODE" });
+    };
+
+    // get flag color
+    const flagColor = isFlagMode ? "warning" : "primary";
   return (
     <Box
       sx={{
@@ -24,7 +31,7 @@ function BoardControls({ dispatch }) {
         mt: 2, // Adjust the margin top as needed to match your layout
       }}
     >
-      <IconButton color="primary">
+      <IconButton color={flagColor} onClick={toggleFlagMode}>
         <FlagIcon />
       </IconButton>
       <IconButton color="primary" onClick={toggleRevealAllCells}>

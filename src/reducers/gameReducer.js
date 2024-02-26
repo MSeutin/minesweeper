@@ -2,6 +2,8 @@ import {
   revealAllMines,
   revealAllCells,
   revealCell,
+    flagCell,
+    removeFlag,
 } from "../utils/boardUtils";
 
 // gameReducer.js
@@ -46,6 +48,32 @@ const gameReducer = (state, action) => {
         board: revealAllCells(state.board, state.allCellsAreRevealed),
         allCellsAreRevealed: !state.allCellsAreRevealed,
       };
+
+    case "TOGGLE_FLAG_MODE":
+      return {
+        ...state,
+        isFlagMode: !state.isFlagMode,
+      };
+
+    case "FLAG_CELL": {
+      const { row, col } = action.payload;
+      const updatedBoard = flagCell(state.board, row, col);
+      return {
+        ...state,
+        board: updatedBoard,
+        // Assuming you want to exit flag mode after placing a flag
+        isFlagMode: false,
+      };
+    }
+
+    case "REMOVE_FLAG": {
+      const { row, col } = action.payload;
+      const updatedBoard = removeFlag(state.board, row, col);
+      return {
+        ...state,
+        board: updatedBoard,
+      };
+    }
 
     default:
       return state;
