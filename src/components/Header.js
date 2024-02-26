@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material/styles";
 import History from "./History";
 
-export default function Header({ setLevel, level, dispatch, showHistory }) {
+export default function Header({ resetGame, level, dispatch, showHistory }) {
     const theme = useTheme();
     
     // use dispatch to toggle history
@@ -62,7 +62,7 @@ export default function Header({ setLevel, level, dispatch, showHistory }) {
           <Button
             variant="outlined"
             color="inherit"
-            onClick={() => setLevel(null)}
+            onClick={resetGame}
           >
             Reset
           </Button>

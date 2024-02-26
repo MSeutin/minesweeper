@@ -73,7 +73,31 @@ const gameReducer = (state, action) => {
         ...state,
         board: updatedBoard,
       };
-    }
+      }
+          
+      case "TICK":
+          return {
+              ...state,
+              timer: state.timer + 1,
+          }
+      
+      case "RESET_GAME":
+          return {
+              ...state,
+              level: null,
+              showHistory: false,
+              showMines: false,
+              minesAreRevealed: false,
+              allCellsAreRevealed: false,
+              isFlagMode: false,
+              isFlagged: false,
+              color: "",
+              backgroundColor: "",
+              timer: 0,
+              gameStatus: "",
+              board: [],
+                
+          }
 
     default:
       return state;

@@ -8,7 +8,9 @@ const initialState = {
     isFlagMode: false,
     isFlagged: false,
     color: "",
-  backgroundColor: "",
+    backgroundColor: "",
+    timer: 0,
+  gameStatus: "", // can be "playing", "won", "lost"
   board: [],
 };
 

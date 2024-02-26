@@ -9,6 +9,10 @@ import { levelConfig } from "./config/levelConfig";
 function App() {
   // initiate useReducer
   const [state, dispatch] = useReducer(gameReducer, initialState);
+  // reset game
+  const resetGame = () => {
+    dispatch({ type: "RESET_GAME" });
+  };
 
   return (
     <Box
@@ -19,7 +23,7 @@ function App() {
       sx={{ width: "100vw", height: "100vh", bgcolor: "#f2f2f2" }}
     >
       <Header
-        setLevel={(level) => dispatch({ type: "SET_LEVEL", payload: level })}
+        resetGame={resetGame}
         level={state.level}
         dispatch={dispatch}
         showHistory={state.showHistory}
@@ -72,6 +76,7 @@ function App() {
             board={state.board}
             isFlagMode={state.isFlagMode}
             isFlagged={state.isFlagged}
+            timer={state.timer}
           />
         )}
         {state.level === "intermediate" && (
@@ -81,6 +86,7 @@ function App() {
             board={state.board}
             isFlagMode={state.isFlagMode}
             isFlagged={state.isFlagged}
+            timer={state.timer}
           />
         )}
         {state.level === "expert" && (
@@ -90,6 +96,7 @@ function App() {
             board={state.board}
             isFlagMode={state.isFlagMode}
             isFlagged={state.isFlagged}
+            timer={state.timer}
           />
         )}
       </div>

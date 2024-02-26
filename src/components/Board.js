@@ -70,7 +70,7 @@ const Row = (props) => {
   );
 };
 
-const Board = ({ config, dispatch, board, isFlagMode, isFlagged }) => {
+const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer }) => {
   const { rows, columns, mines } = config;
 
   // Initialize the board state when component mounts
@@ -80,6 +80,15 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged }) => {
       payload: initBoard(rows, columns, mines),
     });
   }, []);
+    
+    // set timer
+    useEffect(() => {
+        const id = setInterval(() => {
+            dispatch({ type: "TICK" });
+        }, 1000);
+        
+        return () => clearInterval(id);
+    }, [timer])
 
     const onClickCallback = (rowIdx, colIdx) => {
         const cell = board[rowIdx][colIdx];
@@ -133,7 +142,7 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged }) => {
         </Typography>
         <SentimentSatisfiedAltIcon color="warning" />
         <Typography variant="h5" color="crimson">
-          000
+          {timer}
         </Typography>
       </Box>
       <Box
