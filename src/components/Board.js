@@ -94,37 +94,42 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer, gameStar
     }, [gameStarted])
 
     const onClickCallback = (rowIdx, colIdx) => {
-        if(gameStatus === "won" || gameStatus === "lost") return;
-        const cell = board[rowIdx][colIdx];
-        if (!gameStarted) {
-            dispatch({ type: "START_GAME" });
-        }
-        if (isFlagMode) {
-          dispatch({
-              type: "FLAG_CELL",
-              payload: { row: rowIdx, col: colIdx },
-          });
+      if (gameStatus === "won" || gameStatus === "lost") return;
+      const cell = board[rowIdx][colIdx];
+      if (!gameStarted) {
+        dispatch({ type: "START_GAME" });
+      }
+      if (isFlagMode) {
+        dispatch({
+          type: "FLAG_CELL",
+          payload: { row: rowIdx, col: colIdx },
+        });
+        return;
+      }
+      if (cell.isFlagged) {
+        dispatch({
+          type: "REMOVE_FLAG",
+          payload: { row: rowIdx, col: colIdx },
+        });
+        return;
+      }
+        // if cell is empty, reveal all cells around it
+        if (cell.content === "") {
+            dispatch({ type: "REVEAL_EMPTY_CELLS", payload: { newRow: rowIdx, newCol: colIdx } });
             return;
-        }
-        if (cell.isFlagged) {
-          dispatch({
-              type: "REMOVE_FLAG",
-              payload: { row: rowIdx, col: colIdx },
-          });
-            return;
-        } 
+            }
 
-        // if none of the above conditions are met, reveal the cell
+      // if the cell is a mine, end the game
+      if (cell.isMine) {
+        dispatch({ type: "END_GAME", payload: "lost" });
+      }
+
+      // if none of the above conditions are met, reveal the cell
       dispatch({
         type: "REVEAL_CELL",
         payload: { row: rowIdx, col: colIdx },
       });
-        
-        // if the cell is a mine, end the game
-        if (cell.isMine) {
-          dispatch({ type: "END_GAME", payload: "lost" });
-        }
-  };
+    };
 
   // Dynamic width and height calculation
   const dynamicWidth = columns * cellWidth;

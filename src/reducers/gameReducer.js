@@ -5,6 +5,7 @@ import {
   revealCell,
   flagCell,
   removeFlag,
+  revealEmptyCells,
 } from "../utils/boardUtils";
 
 const gameReducer = (state, action) => {
@@ -14,23 +15,23 @@ const gameReducer = (state, action) => {
         ...state,
         gameStarted: true,
       };
-      case "END_GAME":
-          const gameSize = `${state.board.length}x${state.board[0].length}`;
-          const newHistoryRecord = {
-                gameSize: gameSize,
-                gameOutcome: action.payload,
-                gameDuration: state.timer,
-          };
-          let newGameHistory = [...state.gameHistory, newHistoryRecord];
-          if (newGameHistory.length > 10) {
-                newGameHistory = newGameHistory.slice(-10);
-          }
-        return {
-            ...state,
-            gameStarted: false, // stop the timer
-            gameStatus: action.payload,
-            gameHistory: newGameHistory,
-        };
+    case "END_GAME":
+      const gameSize = `${state.board.length}x${state.board[0].length}`;
+      const newHistoryRecord = {
+        gameSize: gameSize,
+        gameOutcome: action.payload,
+        gameDuration: state.timer,
+      };
+      let newGameHistory = [...state.gameHistory, newHistoryRecord];
+      if (newGameHistory.length > 10) {
+        newGameHistory = newGameHistory.slice(-10);
+      }
+      return {
+        ...state,
+        gameStarted: false, // stop the timer
+        gameStatus: action.payload,
+        gameHistory: newGameHistory,
+      };
     case "SET_LEVEL":
       return {
         ...state,
@@ -68,6 +69,22 @@ const gameReducer = (state, action) => {
         ...state,
         board: revealAllCells(state.board, state.allCellsAreRevealed),
         allCellsAreRevealed: !state.allCellsAreRevealed,
+      };
+
+    case "REVEAL_EMPTY_CELLS":
+      const { newRow, newCol } = action.payload;
+      let newUpdatedBoard = revealEmptyCells(state.board, newRow, newCol);
+      newUpdatedBoard = newUpdatedBoard.map((row) =>
+        row.map((cell) => ({
+          ...cell,
+          backgroundColor: cell.isRevealed ? "lightblue" : cell.backgroundColor,
+          color: cell.isRevealed ? "darkgreen" : cell.color,
+        }))
+      );
+
+      return {
+        ...state,
+        board: newUpdatedBoard,
       };
 
     case "TOGGLE_FLAG_MODE":

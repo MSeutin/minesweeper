@@ -1,5 +1,4 @@
 // boardUtils.js
-import FlagIcon from "@mui/icons-material/Flag";
 const bomb = "\u{1F4A3}";
 
 export const initBoard = (rows, columns, mines) => {
@@ -190,23 +189,41 @@ export const removeFlag = (board, row, col) => {
 
 // reveal the empty cells
 export const revealEmptyCells = (board, row, col) => {
+    console.log(`revealEmptyCells called with row: ${row}, col: ${col}`);
   const rows = board.length;
   const columns = board[0].length;
 
-  const newBoard = revealCell(board, row, col);
+  // Base case to stop recursion if the cell is already revealed or out of bounds
+  if (
+    row < 0 ||
+    row >= rows ||
+    col < 0 ||
+    col >= columns ||
+    board[row][col].isRevealed ||
+    board[row][col].content !== ""
+  ) {
+    return board;
+  }
 
+  // Reveal the current cell
+  board[row][col].isRevealed = true;
+
+  // Recursive case: reveal all adjacent cells for an empty cell
   for (let i = row - 1; i <= row + 1; i++) {
     for (let j = col - 1; j <= col + 1; j++) {
-      if (i >= 0 && i < rows && j >= 0 && j < columns) {
-        if (newBoard[i][j].minesAround === 0) {
-          newBoard[i][j].isRevealed = true;
-          revealEmptyCells(newBoard, i, j);
-        } else {
-          newBoard[i][j].isRevealed = true;
-        }
+      // Check bounds and avoid revealing the cell itself again
+      if (
+        i >= 0 &&
+        i < rows &&
+        j >= 0 &&
+        j < columns &&
+        !(i === row && j === col)
+      ) {
+        revealEmptyCells(board, i, j);
       }
     }
   }
 
-  return newBoard;
+  return board;
 };
+
