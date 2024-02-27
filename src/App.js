@@ -27,6 +27,7 @@ function App() {
         level={state.level}
         dispatch={dispatch}
         showHistory={state.showHistory}
+        gameHistory={state.gameHistory}
       />
       <div
         style={{

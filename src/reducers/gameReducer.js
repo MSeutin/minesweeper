@@ -15,10 +15,21 @@ const gameReducer = (state, action) => {
         gameStarted: true,
       };
       case "END_GAME":
+          const gameSize = `${state.board.length}x${state.board[0].length}`;
+          const newHistoryRecord = {
+                gameSize: gameSize,
+                gameOutcome: action.payload,
+                gameDuration: state.timer,
+          };
+          let newGameHistory = [...state.gameHistory, newHistoryRecord];
+          if (newGameHistory.length > 10) {
+                newGameHistory = newGameHistory.slice(-10);
+          }
         return {
             ...state,
             gameStarted: false, // stop the timer
             gameStatus: action.payload,
+            gameHistory: newGameHistory,
         };
     case "SET_LEVEL":
       return {

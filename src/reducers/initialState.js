@@ -11,7 +11,9 @@ const initialState = {
   gameStatus: "", // can be "playing", "won", "lost"
   gameStarted: false,
   endGame: false,
-  timeOfGame: 0,
+  gameDuration: 0,
+  gameSize: 0,
+  gameOutcome: "",
   board: [],
 };
 

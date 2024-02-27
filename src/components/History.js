@@ -7,26 +7,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-function createData(level, time, result) {
-  return { level, time, result };
-}
-
-const rows = [
-  createData("beginner", 159, "win"),
-  createData("Intermediate", 237, "loss"),
-  createData("Expert", 262, "win"),
-  createData("beginner", 305, "loss"),
-  createData("Intermediate", 356, "win"),
-];
-
-export default function DenseTable() {
+export default function History({ showHistory, gameHistory }) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 200 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
             <TableCell align="center" colSpan={3} sx={{ fontWeight: "bold" }}>
-              Game History
+              Last 10 Games History
             </TableCell>
           </TableRow>
           <TableRow>
@@ -36,16 +24,16 @@ export default function DenseTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, idx) => (
+          {gameHistory.length > 0 && gameHistory.map((obj, idx) => (
             <TableRow
               key={idx}
               sx={{
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell>{row.level}</TableCell>
-              <TableCell>{row.time}</TableCell>
-              <TableCell>{row.result}</TableCell>
+              <TableCell>{obj.gameSize}</TableCell>
+              <TableCell>{obj.gameDuration}</TableCell>
+              <TableCell>{obj.gameOutcome}</TableCell>
             </TableRow>
           ))}
         </TableBody>
