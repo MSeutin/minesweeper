@@ -21,13 +21,27 @@ export default function Header({ resetGame, level, dispatch, showHistory, gameHi
     <Box sx={{ flexGrow: 1, width: "100%" }}>
       <AppBar
         position="static"
-        sx={{ backgroundColor: "#f2f2f2", color: theme.palette.primary.main }}
+        sx={{
+          backgroundColor: "#f2f2f2",
+          color: theme.palette.primary.main,
+        }}
       >
         <Toolbar>
-          {/* Logo */}
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            Minesweeper
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+            {/* Logo and Bomb Icon */}
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}
+            >
+              Minesweeper
+              <img
+                src="/images/bomb.png"
+                alt="Bomb"
+                style={{ width: "100px", height: "auto", marginLeft: "10px" }}
+              />
+            </Typography>
+          </Box>
           {/* Toggle history */}
           {level && (
             <IconButton
@@ -59,11 +73,7 @@ export default function Header({ resetGame, level, dispatch, showHistory, gameHi
             </Box>
           )}
           {/* Reset button */}
-          <Button
-            variant="outlined"
-            color="inherit"
-            onClick={resetGame}
-          >
+          <Button variant="outlined" color="inherit" onClick={resetGame}>
             Reset
           </Button>
         </Toolbar>

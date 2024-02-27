@@ -14,13 +14,15 @@ function App() {
     dispatch({ type: "RESET_GAME" });
   };
 
+  const bgColor = state.gameStatus !== "playing" ? "#ffcccb" : "#f2f2f2";
+
   return (
     <Box
       display="flex"
       alignItems="center"
       justifyContent="space-around"
       flexDirection="column"
-      sx={{ width: "100vw", height: "100vh", bgcolor: "#f2f2f2" }}
+      sx={{ width: "100vw", height: "100vh", bgcolor: bgColor }}
     >
       <Header
         resetGame={resetGame}

@@ -155,8 +155,8 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer, gameStar
       >
         <Typography variant="h5" color="darkgreen">
           {mines}
-        </Typography>
-        <SentimentSatisfiedAltIcon color="warning" />
+              </Typography>
+              {gameStatus === "lost" ? <SentimentVeryDissatisfiedIcon color="secondary" /> : <SentimentSatisfiedAltIcon color="primary" />}
         <Typography variant="h5" color="crimson">
           {timer.toString().padStart(3, "0")}
         </Typography>

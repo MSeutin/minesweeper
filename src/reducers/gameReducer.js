@@ -115,7 +115,7 @@ const gameReducer = (state, action) => {
         color: "",
         backgroundColor: "",
         timer: 0,
-        gameStatus: "",
+        gameStatus: "playing",
         gameStarted: false,
         board: [],
       };
