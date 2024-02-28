@@ -15,8 +15,8 @@ const gameReducer = (state, action) => {
         ...state,
         gameStarted: true,
       };
-      case "END_GAME":
-          if (state.allCellsAreRevealed) return state;
+    case "END_GAME":
+      if (state.allCellsAreRevealed) return state;
       const gameSize = `${state.board.length}x${state.board[0].length}`;
       const newHistoryRecord = {
         gameSize: gameSize,
@@ -37,6 +37,7 @@ const gameReducer = (state, action) => {
       return {
         ...state,
         level: action.payload,
+        showNewGameBtn: true,
       };
 
     case "SET_MINES":
@@ -139,6 +140,7 @@ const gameReducer = (state, action) => {
         timer: 0,
         gameStatus: "playing",
         gameStarted: false,
+        showNewGameBtn: false,
         board: [],
       };
 

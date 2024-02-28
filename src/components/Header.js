@@ -1,21 +1,23 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { IconButton, Typography, Box, Toolbar, Button, AppBar } from "@mui/material";
 import HistoryIcon from "@mui/icons-material/History";
-import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material/styles";
 import History from "./History";
 
-export default function Header({ resetGame, level, dispatch, showHistory, gameHistory }) {
-    const theme = useTheme();
-    
-    // use dispatch to toggle history
-    const toggleShowHistory = (show) => {
-        dispatch({ type: "SHOW_HISTORY", payload: show });
-        }
+export default function Header({
+  resetGame,
+  level,
+  dispatch,
+  showHistory,
+  gameHistory,
+  showNewGameBtn,
+}) {
+  const theme = useTheme();
+
+  // use dispatch to toggle history
+  const toggleShowHistory = (show) => {
+    dispatch({ type: "SHOW_HISTORY", payload: show });
+  };
 
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }}>
@@ -30,9 +32,14 @@ export default function Header({ resetGame, level, dispatch, showHistory, gameHi
           <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
             {/* Logo and Bomb Icon */}
             <Typography
-              variant="h5"
+              variant="h4"
               component="div"
-              sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+                alignItems: "center",
+                color: "#8B0000",
+              }}
             >
               Minesweeper
               <img
@@ -42,17 +49,63 @@ export default function Header({ resetGame, level, dispatch, showHistory, gameHi
               />
             </Typography>
           </Box>
+          {/* New Game button */}
+          {showNewGameBtn && (
+            <Button
+              onClick={resetGame}
+              sx={{
+                textTransform: "capitalize",
+                color: "#233142",
+                borderColor: "#233142",
+                border: "1px solid",
+                borderRadius: "4px",
+                fontWeight: "bold",
+                fontSize: "0.8rem",
+                "&:hover": {
+                  bgcolor: "#233142",
+                  color: "white",
+                },
+              }}
+            >
+              New Game
+            </Button>
+          )}
           {/* Toggle history */}
-          {level && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              ml: 3,
+              border: "1px solid",
+              borderColor: "#556B2F",
+              borderRadius: "4px",
+            }}
+          >
             <IconButton
-              color="primary"
               onMouseEnter={() => toggleShowHistory(true)}
               onMouseLeave={() => toggleShowHistory(false)}
-              sx={{ mr: 2 }}
+              sx={{
+                "&:hover": { bgcolor: "transparent", color: "green" },
+                color: "#556B2F",
+              }}
             >
-              <HistoryIcon />
+              <HistoryIcon
+                sx={{ fontWeight: "bold", fontSize: "1rem", color: "#556B2F" }}
+              />
+
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "0.7rem",
+                  color: "#556B2F",
+                  ml: 1,
+                }}
+              >
+                History
+              </Typography>
             </IconButton>
-          )}
+          </Box>
 
           {showHistory && (
             <Box
@@ -72,10 +125,6 @@ export default function Header({ resetGame, level, dispatch, showHistory, gameHi
               <History showHistory={showHistory} gameHistory={gameHistory} />
             </Box>
           )}
-          {/* Reset button */}
-          <Button variant="outlined" color="inherit" onClick={resetGame}>
-            Reset
-          </Button>
         </Toolbar>
       </AppBar>
     </Box>

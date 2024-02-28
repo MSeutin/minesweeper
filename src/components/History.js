@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-export default function History({ showHistory, gameHistory }) {
+export default function History({ gameHistory }) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 200 }} size="small" aria-label="a dense table">

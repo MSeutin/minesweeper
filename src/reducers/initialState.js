@@ -3,6 +3,7 @@ const initialState = {
   level: null,
   gameHistory: [],
   showHistory: false,
+  showNewGameBtn: false,
   showMines: false,
   minesAreRevealed: false,
   allCellsAreRevealed: false,

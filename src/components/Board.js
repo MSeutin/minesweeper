@@ -6,6 +6,7 @@ import BoardControls from "./BoardControls";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 import { initBoard, countRevealedCells } from "../utils/boardUtils";
+import Alert from "@mui/material/Alert";
 
 // Constants for cell size and gaps
 const cellWidth = 25;
@@ -220,10 +221,8 @@ const Board = ({ config, dispatch, state }) => {
           ))}
         </Grid>
       </Box>
-      <BoardControls
-        dispatch={dispatch}
-        isFlagMode={isFlagMode}
-      />
+      <BoardControls dispatch={dispatch} isFlagMode={isFlagMode} />
+          {(gameStatus === "lost" || gameStatus === "won") && (<Alert severity="info">Game Over</Alert>)}
     </Box>
   );
 };

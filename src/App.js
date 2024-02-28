@@ -30,6 +30,7 @@ function App() {
         dispatch={dispatch}
         showHistory={state.showHistory}
         gameHistory={state.gameHistory}
+        showNewGameBtn={state.showNewGameBtn}
       />
       <div
         style={{
