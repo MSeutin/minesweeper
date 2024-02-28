@@ -30,7 +30,7 @@ const Cell = (props) => {
         justifyContent: "center", // Center content horizontally
       }}
     >
-      {cellContent.isRevealed ? (
+      {cellContent.isRevealed || cellContent.isVisible ? (
         <Typography variant="h6" sx={{ color: cellContent.color }}>
           {cellContent.content}
         </Typography>

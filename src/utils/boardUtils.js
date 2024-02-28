@@ -8,6 +8,7 @@ export const initBoard = (rows, columns, mines) => {
       backgroundColor: "lightgrey",
       color: "black",
       isRevealed: false,
+      isVisible: false,
       isMine: false,
       minesAround: 0,
       isFlagged: false,
@@ -31,7 +32,7 @@ export const countRevealedCells = (board) => {
     }
   }
   return revealedCellsCount;
-}
+};
 
 // place mines on the board
 export const placeMines = (board, mines) => {
@@ -128,7 +129,7 @@ export const revealCell = (board, row, col) => {
 export const revealAllCells = (board, allCellsAreRevealed) => {
   return board.map((row) => {
     return row.map((cell) => {
-      return { ...cell, isRevealed: !allCellsAreRevealed };
+      return { ...cell, isVisible: !allCellsAreRevealed };
     });
   });
 };
@@ -238,4 +239,3 @@ export const revealEmptyCells = (board, row, col) => {
 
   return board;
 };
-
