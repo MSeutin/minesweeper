@@ -7,20 +7,20 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 const bomb = "\u{1F4A3}";
 
 function BoardControls({ dispatch, isFlagMode }) {
-    // Toggle functions
-    const toggleRevealAllCells = () => {
-        dispatch({ type: "REVEAL_ALL_CELLS" });
-    }
-  const toggleMinesVisibility = () => {
-    dispatch({ type: "REVEAL_ALL_MINES" }); 
+  // Toggle functions
+  const toggleRevealAllCells = () => {
+    dispatch({ type: "REVEAL_ALL_CELLS" });
   };
-    
-    const toggleFlagMode = () => {
-        dispatch({ type: "TOGGLE_FLAG_MODE" });
-    };
+  const toggleMinesVisibility = () => {
+    dispatch({ type: "REVEAL_ALL_MINES" });
+  };
 
-    // get flag color
-    const flagColor = isFlagMode ? "warning" : "primary";
+  const toggleFlagMode = () => {
+    dispatch({ type: "TOGGLE_FLAG_MODE" });
+  };
+
+  // get flag color
+  const flagColor = isFlagMode ? "warning" : "primary";
   return (
     <Box
       sx={{

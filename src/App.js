@@ -76,36 +76,21 @@ function App() {
           <Board
             config={levelConfig["beginner"]}
             dispatch={dispatch}
-            board={state.board}
-            isFlagMode={state.isFlagMode}
-            isFlagged={state.isFlagged}
-            timer={state.timer}
-            gameStarted={state.gameStarted}
-            gameStatus={state.gameStatus}
+            state={state}
           />
         )}
         {state.level === "intermediate" && (
           <Board
             config={levelConfig["intermediate"]}
             dispatch={dispatch}
-            board={state.board}
-            isFlagMode={state.isFlagMode}
-            isFlagged={state.isFlagged}
-            timer={state.timer}
-            gameStarted={state.gameStarted}
-            gameStatus={state.gameStatus}
+            state={state}
           />
         )}
         {state.level === "expert" && (
           <Board
             config={levelConfig["expert"]}
             dispatch={dispatch}
-            board={state.board}
-            isFlagMode={state.isFlagMode}
-            isFlagged={state.isFlagged}
-            timer={state.timer}
-            gameStarted={state.gameStarted}
-            gameStatus={state.gameStatus}
+            state={state}
           />
         )}
       </div>

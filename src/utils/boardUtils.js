@@ -20,6 +20,19 @@ export const initBoard = (rows, columns, mines) => {
   return board;
 };
 
+// Function to count the number of revealed cells on the board
+export const countRevealedCells = (board) => {
+  let revealedCellsCount = 0;
+  for (let row of board) {
+    for (let cell of row) {
+      if (cell.isRevealed && !cell.isMine) {
+        revealedCellsCount++;
+      }
+    }
+  }
+  return revealedCellsCount;
+}
+
 // place mines on the board
 export const placeMines = (board, mines) => {
   const nums = new Set();
@@ -189,7 +202,6 @@ export const removeFlag = (board, row, col) => {
 
 // reveal the empty cells
 export const revealEmptyCells = (board, row, col) => {
-    console.log(`revealEmptyCells called with row: ${row}, col: ${col}`);
   const rows = board.length;
   const columns = board[0].length;
 

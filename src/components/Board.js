@@ -5,7 +5,7 @@ import FlagIcon from "@mui/icons-material/Flag";
 import BoardControls from "./BoardControls";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import { initBoard} from "../utils/boardUtils";
+import { initBoard, countRevealedCells } from "../utils/boardUtils";
 
 // Constants for cell size and gaps
 const cellWidth = 25;
@@ -70,14 +70,27 @@ const Row = (props) => {
   );
 };
 
-const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer, gameStarted, gameStatus }) => {
-  const { rows, columns, mines } = config;
+const Board = ({ config, dispatch, state }) => {
+    const { rows, columns, mines, full } = config;
+    const {
+      board,
+      isFlagMode,
+      timer,
+      gameStarted,
+      gameStatus,
+    } = state;
 
   // Initialize the board state when component mounts
   useEffect(() => {
     dispatch({
       type: "UPDATE_BOARD",
       payload: initBoard(rows, columns, mines),
+    });
+
+    // Then, place the mines
+    dispatch({
+      type: "PLACE_MINES",
+      payload: { mines },
     });
   }, []);
     
@@ -113,11 +126,14 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer, gameStar
         });
         return;
       }
-        // if cell is empty, reveal all cells around it
-        if (cell.content === "") {
-            dispatch({ type: "REVEAL_EMPTY_CELLS", payload: { newRow: rowIdx, newCol: colIdx } });
-            return;
-            }
+      // if cell is empty, reveal all cells around it
+      if (cell.content === "") {
+        dispatch({
+          type: "REVEAL_EMPTY_CELLS",
+          payload: { newRow: rowIdx, newCol: colIdx },
+        });
+        return;
+      }
 
       // if the cell is a mine, end the game
       if (cell.isMine) {
@@ -129,7 +145,16 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer, gameStar
         type: "REVEAL_CELL",
         payload: { row: rowIdx, col: colIdx },
       });
+
     };
+
+    useEffect(() => {
+      const newRevealedCells = countRevealedCells(board);
+      console.log("Newly revealed cells:", newRevealedCells);
+      if (newRevealedCells === full) {
+        dispatch({ type: "END_GAME", payload: "won" });
+      }
+    }, [board]);
 
   // Dynamic width and height calculation
   const dynamicWidth = columns * cellWidth;
@@ -160,8 +185,12 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer, gameStar
       >
         <Typography variant="h5" color="darkgreen">
           {mines}
-              </Typography>
-              {gameStatus === "lost" ? <SentimentVeryDissatisfiedIcon color="secondary" /> : <SentimentSatisfiedAltIcon color="primary" />}
+        </Typography>
+        {gameStatus === "lost" ? (
+          <SentimentVeryDissatisfiedIcon color="secondary" />
+        ) : (
+          <SentimentSatisfiedAltIcon color="primary" />
+        )}
         <Typography variant="h5" color="crimson">
           {timer.toString().padStart(3, "0")}
         </Typography>
@@ -191,7 +220,10 @@ const Board = ({ config, dispatch, board, isFlagMode, isFlagged, timer, gameStar
           ))}
         </Grid>
       </Box>
-      <BoardControls dispatch={dispatch} isFlagMode={isFlagMode} />
+      <BoardControls
+        dispatch={dispatch}
+        isFlagMode={isFlagMode}
+      />
     </Box>
   );
 };
