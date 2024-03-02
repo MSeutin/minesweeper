@@ -10,6 +10,13 @@ import {
 
 const gameReducer = (state, action) => {
   switch (action.type) {
+      case "INIT_BOARD":
+          const { firstBoard, flags } = action.payload;
+      return {
+          ...state,
+          numberOfFlags: flags,
+        board: firstBoard,
+      };
     case "START_GAME":
       return {
         ...state,
@@ -48,11 +55,7 @@ const gameReducer = (state, action) => {
         ...state,
         showHistory: action.payload, // true or false
       };
-    case "UPDATE_BOARD":
-      return {
-        ...state,
-        board: action.payload,
-      };
+
     case "REVEAL_CELL":
       const { row, col } = action.payload;
       // Use the revealCell function to update the board state
@@ -103,7 +106,8 @@ const gameReducer = (state, action) => {
       const { row, col } = action.payload;
       const updatedBoard = flagCell(state.board, row, col);
       return {
-        ...state,
+          ...state,
+          numberOfFlags: state.numberOfFlags - 1,
         board: updatedBoard,
         // Assuming you want to exit flag mode after placing a flag
         isFlagMode: false,
@@ -114,7 +118,8 @@ const gameReducer = (state, action) => {
       const { row, col } = action.payload;
       const updatedBoard = removeFlag(state.board, row, col);
       return {
-        ...state,
+          ...state,
+            numberOfFlags: state.numberOfFlags + 1,
         board: updatedBoard,
       };
     }
@@ -141,6 +146,7 @@ const gameReducer = (state, action) => {
         gameStatus: "playing",
         gameStarted: false,
         showNewGameBtn: false,
+        numberOfFlags: 0,
         board: [],
       };
 

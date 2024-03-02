@@ -129,7 +129,7 @@ export const revealCell = (board, row, col) => {
 export const revealAllCells = (board, allCellsAreRevealed) => {
   return board.map((row) => {
     return row.map((cell) => {
-      return { ...cell, isVisible: !allCellsAreRevealed };
+      return { ...cell, isRevealed: !allCellsAreRevealed };
     });
   });
 };
@@ -212,8 +212,7 @@ export const revealEmptyCells = (board, row, col) => {
     row >= rows ||
     col < 0 ||
     col >= columns ||
-    board[row][col].isRevealed ||
-    board[row][col].content !== ""
+    board[row][col].isRevealed
   ) {
     return board;
   }
@@ -232,7 +231,13 @@ export const revealEmptyCells = (board, row, col) => {
         j < columns &&
         !(i === row && j === col)
       ) {
-        revealEmptyCells(board, i, j);
+          if (board[i][j].content === "" && !board[i][j].isRevealed) {
+            // Recursively reveal empty cells
+            board = revealEmptyCells(board, i, j);
+          } else {
+            // Reveal the cell
+            board[i][j].isRevealed = true;
+          }
       }
     }
   }

@@ -14,7 +14,7 @@ function App() {
     dispatch({ type: "RESET_GAME" });
   };
 
-  const bgColor = state.gameStatus !== "playing" ? "#d9d9d9" : "#f2f2f2";
+  const bgColor = state.gameStatus !== "playing" ? "#303030" : "#f2f2f2";
 
   return (
     <Box

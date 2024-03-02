@@ -79,13 +79,14 @@ const Board = ({ config, dispatch, state }) => {
       timer,
       gameStarted,
       gameStatus,
+      numberOfFlags,
     } = state;
 
   // Initialize the board state when component mounts
   useEffect(() => {
     dispatch({
-      type: "UPDATE_BOARD",
-      payload: initBoard(rows, columns, mines),
+      type: "INIT_BOARD",
+        payload: { firstBoard: initBoard(rows, columns, mines), flags: mines },
     });
 
     // Then, place the mines
@@ -187,7 +188,7 @@ const Board = ({ config, dispatch, state }) => {
         }}
       >
         <Typography variant="h5" color="darkgreen">
-          {mines}
+          {numberOfFlags}
         </Typography>
         {gameStatus === "lost" ? (
           <SentimentVeryDissatisfiedIcon color="secondary" />

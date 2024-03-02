@@ -16,6 +16,7 @@ const initialState = {
   gameSize: 0,
   gameOutcome: "",
   mines: 0,
+  numberOfFlags: 0,
   board: [],
 };
 
