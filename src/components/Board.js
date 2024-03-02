@@ -137,8 +137,10 @@ const Board = ({ config, dispatch, state }) => {
       }
 
       // if the cell is a mine, end the game
-      if (cell.isMine) {
-        dispatch({ type: "END_GAME", payload: "lost" });
+        if (cell.isMine) {
+          
+            dispatch({ type: "END_GAME", payload: "lost" });
+            dispatch({ type: "REVEAL_ALL_CELLS" });
       }
 
       // if none of the above conditions are met, reveal the cell
@@ -221,8 +223,9 @@ const Board = ({ config, dispatch, state }) => {
           ))}
         </Grid>
       </Box>
-      <BoardControls dispatch={dispatch} isFlagMode={isFlagMode} />
-          {(gameStatus === "lost" || gameStatus === "won") && (<Alert severity="info">Game Over</Alert>)}
+          <BoardControls dispatch={dispatch} isFlagMode={isFlagMode} />
+          {gameStatus === "lost" && (<Alert severity="error">You Lost</Alert>)}
+            {gameStatus === "won" && (<Alert severity="success">You Won</Alert>)}
     </Box>
   );
 };
