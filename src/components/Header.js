@@ -29,25 +29,22 @@ export default function Header({
         }}
       >
         <Toolbar>
-          <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
             {/* Logo and Bomb Icon */}
             <Typography
-              variant="h4"
-              component="div"
+              variant="subtitle1"
               sx={{
-                flexGrow: 1,
-                display: "flex",
-                alignItems: "center",
+                fontWeight: "bold",
                 color: "#8B0000",
               }}
             >
               Minesweeper
-              <img
-                src="/images/bomb.png"
-                alt="Bomb"
-                style={{ width: "100px", height: "auto", marginLeft: "10px" }}
-              />
             </Typography>
+            <img
+              src="/images/bomb.png"
+              alt="Bomb"
+              style={{ width: "60px", height: "auto", marginLeft: "10px" }}
+            />
           </Box>
           {/* New Game button */}
           {showNewGameBtn && (

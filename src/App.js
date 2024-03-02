@@ -1,14 +1,18 @@
 import { useReducer } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Board from "./components/Board";
 import Header from "./components/Header";
 import gameReducer from "./reducers/gameReducer";
 import initialState from "./reducers/initialState";
 import { levelConfig } from "./config/levelConfig";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 function App() {
   // initiate useReducer
   const [state, dispatch] = useReducer(gameReducer, initialState);
+
+  const matches = useMediaQuery("(min-width:600px)");
+
   // reset game
   const resetGame = () => {
     dispatch({ type: "RESET_GAME" });
@@ -63,16 +67,21 @@ function App() {
             >
               Intermediate
             </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="large"
-              onClick={() => dispatch({ type: "SET_LEVEL", payload: "expert" })}
-            >
-              Expert
-            </Button>
+            {matches && (
+              <Button
+                variant="outlined"
+                color="primary"
+                size="large"
+                onClick={() =>
+                  dispatch({ type: "SET_LEVEL", payload: "expert" })
+                }
+              >
+                Expert
+              </Button>
+            )}
           </>
         )}
+
         {state.level === "beginner" && (
           <Board
             config={levelConfig["beginner"]}
